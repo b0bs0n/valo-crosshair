@@ -112,6 +112,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn_save_ch.clicked.connect(self.save_crosshair)
         self.btn_del_ch.clicked.connect(self.delete_crosshair)
 
+        self.btn_stretch_apply.clicked.connect(self.apply_res)
+
         self.qcb_crosshair_color.addItems(self.ch._COLORS.keys())
         self.qcb_crosshair_color.currentIndexChanged.connect(self.qcb_chg_crosshair_color)
 
@@ -343,6 +345,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.qcb_ch_select.setCurrentIndex(0)
             self.select_crosshair()
 
+    def apply_res(self):
+        try:
+            sw = int(self.le_res_screen_w.text())
+            sh = int(self.le_res_screen_h.text())
+            gw = int(self.le_res_game_w.text())
+            gh = int(self.le_res_game_h.text())
+            res = [sw, sh, gw, gh]
+            if all(200 < i < 10000 for i in res) and all(not (i % 2) for i in res):
+                self.ch._resolutions = res
+                self.disp_crosshair()
+                return
+        except ValueError:
+            pass
+        self.le_res_screen_w.setText(str(self.ch._resolutions[0]))
+        self.le_res_screen_h.setText(str(self.ch._resolutions[1]))
+        self.le_res_game_w.setText(str(self.ch._resolutions[2]))
+        self.le_res_game_h.setText(str(self.ch._resolutions[3]))
+
     def load_crosshair(self):
         self.qcb_crosshair_color.setCurrentText(self.ch._color)
         #  outlines
@@ -381,6 +401,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.slide_outer_thck.setValue(self.ch._outer[3])
         self.le_outer_offset.setText(str(self.ch._outer[4]))
         self.slide_outer_offset.setValue(self.ch._outer[4])
+        # Resolutions
+        self.le_res_screen_w.setText(str(self.ch._resolutions[0]))
+        self.le_res_screen_h.setText(str(self.ch._resolutions[1]))
+        self.le_res_game_w.setText(str(self.ch._resolutions[2]))
+        self.le_res_game_h.setText(str(self.ch._resolutions[3]))
 
 
 if __name__ == '__main__':

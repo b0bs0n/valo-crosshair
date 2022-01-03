@@ -16,8 +16,10 @@ class Crosshair:
     _dot = [False, 1, 2]
     _inner = [True, 1, 4, 2, 2]
     _outer = [False, 1, 2, 2, 6]
+    _resolutions = [1920, 1080, 1920, 1080]
 
     def __init__(self):
+        self.size = 50
         pass
 
     def set_color(self, color):
@@ -164,6 +166,16 @@ class Crosshair:
 
         ch_x = Image.alpha_composite(ch_x, ch_dot)
         ch_x = Image.alpha_composite(ch_x, ch_outer)
+        # Apply screen stretch
+        if self._resolutions[:2] != self._resolutions[2:]:
+            game = Image.new('RGBA', (self._resolutions[2], self._resolutions[3]))
+            coord = (int((self._resolutions[2] - 50) / 2), int((self._resolutions[3] - 50) / 2))
+            game.paste(ch_x, coord)
+            game = game.resize((self._resolutions[0], self._resolutions[1]), resample=Image.BILINEAR)
+            ch_x = game.crop((int(self._resolutions[0] / 2 - 25),
+                              int(self._resolutions[1] / 2 - 25),
+                              int(self._resolutions[0] / 2 + 25),
+                              int(self._resolutions[1] / 2 + 25)))
         return ch_x
 
     def gen_pnginfo(self):
@@ -178,6 +190,7 @@ class Crosshair:
         info.add_text('dot', convert(self._dot))
         info.add_text('inner', convert(self._inner))
         info.add_text('outer', convert(self._outer))
+        info.add_text('resolutions', convert(self._resolutions))
         return info
 
     def save_png(self, path):
@@ -208,6 +221,7 @@ class Crosshair:
             self._dot = convert(info['dot'])
             self._inner = convert(info['inner'])
             self._outer = convert(info['outer'])
+            self._resolutions = convert(info['resolutions'])
         pass
 
 

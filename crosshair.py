@@ -3,7 +3,7 @@ import math
 
 
 class Crosshair:
-    _COLORS = {'White': (255, 255, 255),
+    COLORS = {'White': (255, 255, 255),
                'Green': (0, 255, 0),
                'Yellow Green': (154, 205, 50),
                'Green Yellow': (173, 255, 47),
@@ -11,77 +11,77 @@ class Crosshair:
                'Cyan': (0, 255, 255),
                'Pink': (255, 0, 255),
                'Red': (255, 0, 0)}
-    _color = 'Green'
-    _outlines = [False, 1, 1]
-    _dot = [False, 1, 2]
-    _inner = [True, 1, 4, 2, 2]
-    _outer = [False, 1, 2, 2, 6]
-    _resolutions = [1920, 1080, 1920, 1080]
+    color = 'Green'
+    outlines = [False, 1, 1]
+    dot = [False, 1, 2]
+    inner = [True, 1, 4, 2, 2]
+    outer = [False, 1, 2, 2, 6]
+    resolutions = [1920, 1080, 1920, 1080]
 
     def __init__(self):
         self.size = 50
         pass
 
     def set_color(self, color):
-        if color in self._COLORS.keys():
-            self._color = color
+        if color in self.COLORS.keys():
+            self.color = color
 
     def set_outlines(self, outlines):
-        self._outlines[0] = outlines
+        self.outlines[0] = outlines
 
     def set_outline_opacity(self, opacity):
-        self._outlines[1] = opacity
+        self.outlines[1] = opacity
 
     def set_outline_thickness(self, thickness):
-        self._outlines[2] = thickness
+        self.outlines[2] = thickness
 
     def set_dot(self, dot):
-        self._dot[0] = dot
+        self.dot[0] = dot
 
     def set_dot_opacity(self, opacity):
-        self._dot[1] = opacity
+        self.dot[1] = opacity
 
     def set_dot_thickness(self, thickness):
-        self._dot[2] = thickness
+        self.dot[2] = thickness
 
     def set_inner(self, inner):
-        self._inner[0] = inner
+        self.inner[0] = inner
 
     def set_inner_opacity(self, opacity):
-        self._inner[1] = opacity
+        self.inner[1] = opacity
 
     def set_inner_length(self, length):
-        self._inner[2] = length
+        self.inner[2] = length
 
     def set_inner_thickness(self, thickness):
-        self._inner[3] = thickness
+        self.inner[3] = thickness
 
     def set_inner_offset(self, offset):
-        self._inner[4] = offset
+        self.inner[4] = offset
 
     def set_outer(self, outer):
-        self._outer[0] = outer
+        self.outer[0] = outer
 
     def set_outer_opacity(self, opacity):
-        self._outer[1] = opacity
+        self.outer[1] = opacity
 
     def set_outer_length(self, length):
-        self._outer[2] = length
+        self.outer[2] = length
 
     def set_outer_thickness(self, thickness):
-        self._outer[3] = thickness
+        self.outer[3] = thickness
 
     def set_outer_offset(self, offset):
-        self._outer[4] = offset
+        self.outer[4] = offset
 
     def draw_crosshair(self):
         # Drawing inner Lines
         ct = 25
         ch_tmp = Image.new('RGBA', (50, 50))
-        col_outline = (0, 0, 0, int(255 * self._outlines[1]))
-        col_inner = self._COLORS[self._color] + (int(255 * self._inner[1]),)
-        col_outer = self._COLORS[self._color] + (int(255 * self._outer[1]),)
-        col_dot = self._COLORS[self._color] + (int(255 * self._dot[1]),)
+        col_outline = (0, 0, 0, int(255 * self.outlines[1]))
+        col_inner = self.COLORS[self.color] + (int(255 * self.inner[1]),)
+        col_outer = self.COLORS[self.color] + (int(255 * self.outer[1]),)
+        col_dot = self.COLORS[self.color] + (int(255 * self.dot[1]),)
 
         def draw_lines(line, color):
             ch_bg = ch_tmp.copy()
@@ -90,17 +90,17 @@ class Crosshair:
                 draw = ImageDraw.Draw(ch_bg)
                 draw2 = ImageDraw.Draw(ch_bg2)
                 offset = line[3] % 2
-                if self._outlines[0]:
-                    draw.rectangle((ct - line[2] - line[4] - offset - self._outlines[2],
-                                    ct - math.ceil((line[3]) / 2) - self._outlines[2],
-                                    ct - line[4] - offset + self._outlines[2] - 1,
-                                    ct + math.floor((line[3] / 2)) + self._outlines[2] - 1),
+                if self.outlines[0]:
+                    draw.rectangle((ct - line[2] - line[4] - offset - self.outlines[2],
+                                    ct - math.ceil((line[3]) / 2) - self.outlines[2],
+                                    ct - line[4] - offset + self.outlines[2] - 1,
+                                    ct + math.floor((line[3] / 2)) + self.outlines[2] - 1),
                                    fill=col_outline)
 
-                    draw2.rectangle((ct + line[4] - self._outlines[2],
-                                     ct + math.floor((line[3] / 2)) + self._outlines[2] - 1,
-                                     ct + line[2] + line[4] + self._outlines[2] - 1,
-                                     ct - math.ceil((line[3]) / 2) - self._outlines[2]),
+                    draw2.rectangle((ct + line[4] - self.outlines[2],
+                                     ct + math.floor((line[3] / 2)) + self.outlines[2] - 1,
+                                     ct + line[2] + line[4] + self.outlines[2] - 1,
+                                     ct - math.ceil((line[3]) / 2) - self.outlines[2]),
                                     fill=col_outline)
 
                     draw.rectangle((ct - line[2] - line[4] - offset,
@@ -134,17 +134,17 @@ class Crosshair:
 
         def draw_dot():
             ch_bg = ch_tmp.copy()
-            if self._dot[0]:
+            if self.dot[0]:
                 ch_bg2 = ch_tmp.copy()
                 draw = ImageDraw.Draw(ch_bg)
                 draw2 = ImageDraw.Draw(ch_bg2)
-                offset = self._dot[2] % 2
-                width = self._dot[2] // 2
-                if self._outlines[0]:
-                    draw.rectangle((ct - width - self._outlines[2] - offset,
-                                    ct - width - self._outlines[2] - offset,
-                                    ct + width + self._outlines[2] - 1,
-                                    ct + width + self._outlines[2] - 1),
+                offset = self.dot[2] % 2
+                width = self.dot[2] // 2
+                if self.outlines[0]:
+                    draw.rectangle((ct - width - self.outlines[2] - offset,
+                                    ct - width - self.outlines[2] - offset,
+                                    ct + width + self.outlines[2] - 1,
+                                    ct + width + self.outlines[2] - 1),
                                    fill=col_outline)
                     draw.rectangle((ct - width - offset,
                                     ct - width - offset,
@@ -160,22 +160,22 @@ class Crosshair:
                 ch_bg = Image.alpha_composite(ch_bg, ch_bg2)
             return ch_bg
 
-        ch_x = draw_lines(self._inner, col_inner)
+        ch_x = draw_lines(self.inner, col_inner)
         ch_dot = draw_dot()
-        ch_outer = draw_lines(self._outer, col_outer)
+        ch_outer = draw_lines(self.outer, col_outer)
 
         ch_x = Image.alpha_composite(ch_x, ch_dot)
         ch_x = Image.alpha_composite(ch_x, ch_outer)
         # Apply screen stretch
-        if self._resolutions[:2] != self._resolutions[2:]:
-            game = Image.new('RGBA', (self._resolutions[2], self._resolutions[3]))
-            coord = (int((self._resolutions[2] - 50) / 2), int((self._resolutions[3] - 50) / 2))
+        if self.resolutions[:2] != self.resolutions[2:]:
+            game = Image.new('RGBA', (self.resolutions[2], self.resolutions[3]))
+            coord = (int((self.resolutions[2] - 50) / 2), int((self.resolutions[3] - 50) / 2))
             game.paste(ch_x, coord)
-            game = game.resize((self._resolutions[0], self._resolutions[1]), resample=Image.BILINEAR)
-            ch_x = game.crop((int(self._resolutions[0] / 2 - 25),
-                              int(self._resolutions[1] / 2 - 25),
-                              int(self._resolutions[0] / 2 + 25),
-                              int(self._resolutions[1] / 2 + 25)))
+            game = game.resize((self.resolutions[0], self.resolutions[1]), resample=Image.BILINEAR)
+            ch_x = game.crop((int(self.resolutions[0] / 2 - 25),
+                              int(self.resolutions[1] / 2 - 25),
+                              int(self.resolutions[0] / 2 + 25),
+                              int(self.resolutions[1] / 2 + 25)))
         return ch_x
 
     def gen_pnginfo(self):
@@ -185,12 +185,12 @@ class Crosshair:
 
         info = PngImagePlugin.PngInfo()
         info.add_text('software', 'val_crosshair_tool')
-        info.add_text('color', self._color)
-        info.add_text('outlines', convert(self._outlines))
-        info.add_text('dot', convert(self._dot))
-        info.add_text('inner', convert(self._inner))
-        info.add_text('outer', convert(self._outer))
-        info.add_text('resolutions', convert(self._resolutions))
+        info.add_text('color', self.color)
+        info.add_text('outlines', convert(self.outlines))
+        info.add_text('dot', convert(self.dot))
+        info.add_text('inner', convert(self.inner))
+        info.add_text('outer', convert(self.outer))
+        info.add_text('resolutions', convert(self.resolutions))
         return info
 
     def save_png(self, path):
@@ -216,12 +216,12 @@ class Crosshair:
 
         with Image.open(path) as png:
             info = png.info
-            self._color = info['color']
-            self._outlines = convert(info['outlines'])
-            self._dot = convert(info['dot'])
-            self._inner = convert(info['inner'])
-            self._outer = convert(info['outer'])
-            self._resolutions = convert(info['resolutions'])
+            self.color = info['color']
+            self.outlines = convert(info['outlines'])
+            self.dot = convert(info['dot'])
+            self.inner = convert(info['inner'])
+            self.outer = convert(info['outer'])
+            self.resolutions = convert(info['resolutions'])
         pass
 
 

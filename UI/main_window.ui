@@ -1380,6 +1380,19 @@
      <string>Delete Crosshair</string>
     </property>
    </widget>
+   <widget class="QLabel" name="lbl_err_msg">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>780</y>
+      <width>521</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

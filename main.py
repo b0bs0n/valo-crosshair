@@ -54,7 +54,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.lbl_link.setText(u"<a href=\"https://github.com/b0bs0n/valo-crosshair\">Project Home</a>")
         self.ch = Crosshair()
-        self.path = aimtrainer.get_crosshair_path()
+
+        try:
+            self.path = aimtrainer.get_crosshair_path()
+        except FileNotFoundError as R:
+            if R.filename is not None:
+                self.lbl_err_msg.setText('Not found: ' + R.filename)
+            else:
+                self.lbl_err_msg.setText('Could not find Steam Installation')
+            self.path = '.\\'
 
         self.read_ch_names()
         self.scene = QGraphicsScene()
@@ -114,7 +122,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.btn_stretch_apply.clicked.connect(self.apply_res)
 
-        self.qcb_crosshair_color.addItems(self.ch._COLORS.keys())
+        self.qcb_crosshair_color.addItems(self.ch.COLORS.keys())
         self.qcb_crosshair_color.currentIndexChanged.connect(self.qcb_chg_crosshair_color)
 
         self.qcb_ch_select.activated.connect(self.select_crosshair)
@@ -288,6 +296,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def read_ch_names(self):
         files, chs = aimtrainer.get_managed_crosshairs(self.path)
         self.ch_names = [i[:-4] for i in chs]
+        self.ch_names.sort()
         self.file_names = [i[:-4] for i in files]
 
     def qcb_populate(self):
@@ -353,59 +362,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             gh = int(self.le_res_game_h.text())
             res = [sw, sh, gw, gh]
             if all(200 < i < 10000 for i in res) and all(not (i % 2) for i in res):
-                self.ch._resolutions = res
+                self.ch.resolutions = res
                 self.disp_crosshair()
                 return
         except ValueError:
             pass
-        self.le_res_screen_w.setText(str(self.ch._resolutions[0]))
-        self.le_res_screen_h.setText(str(self.ch._resolutions[1]))
-        self.le_res_game_w.setText(str(self.ch._resolutions[2]))
-        self.le_res_game_h.setText(str(self.ch._resolutions[3]))
+        self.le_res_screen_w.setText(str(self.ch.resolutions[0]))
+        self.le_res_screen_h.setText(str(self.ch.resolutions[1]))
+        self.le_res_game_w.setText(str(self.ch.resolutions[2]))
+        self.le_res_game_h.setText(str(self.ch.resolutions[3]))
 
     def load_crosshair(self):
-        self.qcb_crosshair_color.setCurrentText(self.ch._color)
+        self.qcb_crosshair_color.setCurrentText(self.ch.color)
         #  outlines
-        self.btn_outline_on.setChecked(self.ch._outlines[0])
-        self.btn_outline_off.setChecked(not self.ch._outlines[0])
-        self.le_outline_opacity.setText(str(self.ch._outlines[1]))
-        self.slide_outline_opacity.setValue(1000 * self.ch._outlines[1])
-        self.le_outline_thck.setText(str(self.ch._outlines[2]))
-        self.slide_outline_thck.setValue(self.ch._outlines[2])
+        self.btn_outline_on.setChecked(self.ch.outlines[0])
+        self.btn_outline_off.setChecked(not self.ch.outlines[0])
+        self.le_outline_opacity.setText(str(self.ch.outlines[1]))
+        self.slide_outline_opacity.setValue(1000 * self.ch.outlines[1])
+        self.le_outline_thck.setText(str(self.ch.outlines[2]))
+        self.slide_outline_thck.setValue(self.ch.outlines[2])
         #  center dot
-        self.btn_dot_on.setChecked(self.ch._dot[0])
-        self.btn_dot_off.setChecked(not self.ch._dot[0])
-        self.le_dot_opacity.setText(str(self.ch._dot[1]))
-        self.slide_dot_opacity.setValue(1000 * self.ch._dot[1])
-        self.le_dot_thck.setText(str(self.ch._dot[2]))
-        self.slide_dot_thck.setValue(self.ch._dot[2])
+        self.btn_dot_on.setChecked(self.ch.dot[0])
+        self.btn_dot_off.setChecked(not self.ch.dot[0])
+        self.le_dot_opacity.setText(str(self.ch.dot[1]))
+        self.slide_dot_opacity.setValue(1000 * self.ch.dot[1])
+        self.le_dot_thck.setText(str(self.ch.dot[2]))
+        self.slide_dot_thck.setValue(self.ch.dot[2])
         #  inner
-        self.btn_inner_on.setChecked(self.ch._inner[0])
-        self.btn_inner_off.setChecked(not self.ch._inner[0])
-        self.le_inner_opacity.setText(str(self.ch._inner[1]))
-        self.slide_inner_opacity.setValue(1000 * self.ch._inner[1])
-        self.le_inner_length.setText(str(self.ch._inner[2]))
-        self.slide_inner_length.setValue(self.ch._inner[2])
-        self.le_inner_thck.setText(str(self.ch._inner[3]))
-        self.slide_inner_thck.setValue(self.ch._inner[3])
-        self.le_inner_offset.setText(str(self.ch._inner[4]))
-        self.slide_inner_offset.setValue(self.ch._inner[4])
+        self.btn_inner_on.setChecked(self.ch.inner[0])
+        self.btn_inner_off.setChecked(not self.ch.inner[0])
+        self.le_inner_opacity.setText(str(self.ch.inner[1]))
+        self.slide_inner_opacity.setValue(1000 * self.ch.inner[1])
+        self.le_inner_length.setText(str(self.ch.inner[2]))
+        self.slide_inner_length.setValue(self.ch.inner[2])
+        self.le_inner_thck.setText(str(self.ch.inner[3]))
+        self.slide_inner_thck.setValue(self.ch.inner[3])
+        self.le_inner_offset.setText(str(self.ch.inner[4]))
+        self.slide_inner_offset.setValue(self.ch.inner[4])
         # outer
-        self.btn_outer_on.setChecked(self.ch._outer[0])
-        self.btn_outer_off.setChecked(not self.ch._outer[0])
-        self.le_outer_opacity.setText(str(self.ch._outer[1]))
-        self.slide_outer_opacity.setValue(1000 * self.ch._outer[1])
-        self.le_outer_length.setText(str(self.ch._outer[2]))
-        self.slide_outer_length.setValue(self.ch._outer[2])
-        self.le_outer_thck.setText(str(self.ch._outer[3]))
-        self.slide_outer_thck.setValue(self.ch._outer[3])
-        self.le_outer_offset.setText(str(self.ch._outer[4]))
-        self.slide_outer_offset.setValue(self.ch._outer[4])
+        self.btn_outer_on.setChecked(self.ch.outer[0])
+        self.btn_outer_off.setChecked(not self.ch.outer[0])
+        self.le_outer_opacity.setText(str(self.ch.outer[1]))
+        self.slide_outer_opacity.setValue(1000 * self.ch.outer[1])
+        self.le_outer_length.setText(str(self.ch.outer[2]))
+        self.slide_outer_length.setValue(self.ch.outer[2])
+        self.le_outer_thck.setText(str(self.ch.outer[3]))
+        self.slide_outer_thck.setValue(self.ch.outer[3])
+        self.le_outer_offset.setText(str(self.ch.outer[4]))
+        self.slide_outer_offset.setValue(self.ch.outer[4])
         # Resolutions
-        self.le_res_screen_w.setText(str(self.ch._resolutions[0]))
-        self.le_res_screen_h.setText(str(self.ch._resolutions[1]))
-        self.le_res_game_w.setText(str(self.ch._resolutions[2]))
-        self.le_res_game_h.setText(str(self.ch._resolutions[3]))
+        self.le_res_screen_w.setText(str(self.ch.resolutions[0]))
+        self.le_res_screen_h.setText(str(self.ch.resolutions[1]))
+        self.le_res_game_w.setText(str(self.ch.resolutions[2]))
+        self.le_res_game_h.setText(str(self.ch.resolutions[3]))
 
 
 if __name__ == '__main__':

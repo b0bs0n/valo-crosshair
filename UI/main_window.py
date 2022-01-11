@@ -695,6 +695,9 @@ class Ui_MainWindow(object):
         self.btn_del_ch = QPushButton(self.centralwidget)
         self.btn_del_ch.setObjectName(u"btn_del_ch")
         self.btn_del_ch.setGeometry(QRect(180, 800, 141, 41))
+        self.lbl_err_msg = QLabel(self.centralwidget)
+        self.lbl_err_msg.setObjectName(u"lbl_err_msg")
+        self.lbl_err_msg.setGeometry(QRect(10, 780, 521, 20))
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -758,5 +761,6 @@ class Ui_MainWindow(object):
         self.btn_save_ch.setText(QCoreApplication.translate("MainWindow", u"Save Crosshair", None))
         self.lbl_link.setText(QCoreApplication.translate("MainWindow", u"<a href=\"http://example.com/\">Project Home</a>", None))
         self.btn_del_ch.setText(QCoreApplication.translate("MainWindow", u"Delete Crosshair", None))
+        self.lbl_err_msg.setText("")
     # retranslateUi
 
